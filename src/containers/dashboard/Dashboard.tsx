@@ -34,6 +34,7 @@ interface Device {
 const Dashboard: React.FC = () => {
 	const [artists, setArtists] = useState<Artists[]>([]);
 	const [artist, setArtist] = useState<Artist>();
+	// @ts-ignore
 	const [device, setDevice] = useState<Device>();
 
 	useEffect(() => {

@@ -19,7 +19,9 @@ const ModalUserInfo: React.FC<ModalCompoProps> = ({open, setOpen}) => {
 	const [lastNameUser, setLastName] = useState(lastname || '');
 	// @ts-ignore
 	const [emailUser, setEmail] = useState(email || '');
+	// @ts-ignore
 	const [countryUser, setCountry] = useState(country || '');
+	// @ts-ignore
 	const [productUser, setProduct] = useState(product || '');
 	// @ts-ignore
 
