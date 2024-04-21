@@ -38,12 +38,12 @@ const CardMusic: React.FC<MyInputProps> = ({
 
 	return (
 		<Card
-			style={{width: 600, height: 400, margin: "40px 50px 40px 50px"}}
+			style={{objectFit:"cover", width: 600, height: 400, margin: "40px 50px 40px 50px"}}
 			cover={
 				<img
-					alt="example"
+					alt="Pochette de l'album"
 					src={image}
-					style={{width: '600px', height: '250px'}}
+					style={{objectFit:"cover",width: '600px', height: '250px'}}
 				/>
 			}
 			actions={[
