@@ -34,7 +34,7 @@ const CardMusic: React.FC<MyInputProps> = ({
 
 	return (
 		<Card
-			style={{ width: 600, height: 400, margin: "40px 50px" }}
+			style={{ width: 600, height: 360, margin: "40px 50px" }}
 			cover={<img alt="NOT FOUND" src={image} style={{ width: '600px', height: '250px' }} />}
 			actions={[
 				<Button icon={<LeftCircleOutlined />} onClick={onPreviousClick} disabled={!isPlaying} type="text" />,

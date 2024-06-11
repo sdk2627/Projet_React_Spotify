@@ -248,12 +248,12 @@ const Dashboard: React.FC = () => {
 					</div>
 				</div>
 				<Space direction="vertical" size="middle" style={{display: 'flex'}}>
-					<div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+					<div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexWrap: 'wrap' }}>
 						<CardMusic
 							image={artist?.album.images[0].url}
 							title={artist?.name}
 							description={artist?.artists[0].name}
-							onPlayClick={() => {	
+							onPlayClick={() => {
 								playMusic();
 								setIsPlaying(true);
 							}}
@@ -277,15 +277,14 @@ const Dashboard: React.FC = () => {
 					<ContentComponent padding={"40px"} margin={"25px 50px 80px 50px"} heigth={"400px"}>
 						<h1 style={{margin: "0 auto 50px auto", textAlign: 'center'}}>Listes des abonnements</h1>
 						<div style={{
-							display: 'flex',
-							flexWrap: 'wrap',
+							display: 'grid',
+							gridTemplateColumns: 'repeat(auto-fill, minmax(220px,270px))',
+							justifyContent: 'center',
 							justifyItems: 'center',
-							justifyContent: 'space-between',
-							alignItems: 'flex-start',
-							gap: '20px',
+							alignItems: 'center',
 						}}>
 							{artists && artists.map((artist, index) => (
-								<div key={index} style={{width: 'calc(20% - 20px)'}}>
+								<div key={index}>
 									<CardComponent
 										image={artist.images[0]?.url}
 										title={artist.name}

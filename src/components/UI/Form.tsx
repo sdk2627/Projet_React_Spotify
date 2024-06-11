@@ -28,7 +28,7 @@ const Form: React.FC<FormProps> = ({
 				flexDirection: 'column',
 				justifyContent: 'center',
 				backgroundColor: 'white',
-				borderRadius: '20px',
+				borderRadius: '10px',
 				borderColor: 'white'
 			}}
 			autoComplete="off"

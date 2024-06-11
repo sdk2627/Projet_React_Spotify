@@ -41,7 +41,7 @@ const HeaderComponent: React.FC = () => {
 					display: 'flex',
 					justifyContent: 'space-between',
 					alignItems: 'center',
-					background: 'linear-gradient(to bottom, #1DB954 0%, rgb(41, 43, 33) 80%)',
+					background: '#052410',
 					height: '70px',
 					padding: '0 30px'
 				}}>
@@ -69,7 +69,7 @@ const HeaderComponent: React.FC = () => {
 						>
 							<Menu mode="horizontal" selectedKeys={[selectedMenuKey]}
 										style={{
-											background: 'linear-gradient(to bottom, #1DB954 0%, rgb(41, 43, 33) 80%)',
+											background: '#052410',
 											color: 'white',
 											fontSize: "18px",
 											borderBottom: "0px transparent",
