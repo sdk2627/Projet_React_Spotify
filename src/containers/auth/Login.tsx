@@ -4,7 +4,7 @@ import InputCompo from "../../components/UI/Input";
 import Button from "../../components/UI/Button";
 import React, {useState} from "react";
 import {Divider} from "antd";
-import spotify from "../../assets/Spotify_logo_without_text.svg.png";
+import spotify from "../../assets/Spotify_logo_without_text.png";
 import InputPasswordCompo from "../../components/UI/InputPassword.tsx";
 import {useNavigate} from "react-router-dom";
 

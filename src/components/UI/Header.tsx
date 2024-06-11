@@ -2,6 +2,7 @@ import {ConfigProvider, Layout, Menu} from 'antd';
 import DropdownList from "./DropdownList";
 import {useNavigate, useLocation} from 'react-router-dom';
 import {useEffect, useState} from "react";
+import spotify from "../../assets/Spotify_logo_without_text.png";
 
 const {Header} = Layout;
 
@@ -47,7 +48,7 @@ const HeaderComponent: React.FC = () => {
 
 					<div style={{display: 'flex', alignItems: 'center'}}>
 						<div className="demo-logo" onClick={handleLogoClick} style={{display: 'flex', alignItems: 'center'}}>
-							<img src="../../assets/Spotify_logo_without_text.svg.png" alt="Logo" style={{
+							<img src= {spotify} alt="Logo" style={{
 								height: '45px',
 								width: '45px',
 								marginRight: '20px',
