@@ -1,9 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import HeaderComponent from "../../components/UI/Header";
-import {Space} from "antd";
+import { Input, message, Space } from "antd";
 import ContentComponent from "../../components/UI/Content";
-import CardComponent from "../../components/UI/Card.tsx";
-import CardMusic from "../../components/UI/CardMusic.tsx";
+import CardComponent from "../../components/UI/Card";
+import CardMusic from "../../components/UI/CardMusic";
+import { LuUser } from "react-icons/lu";
+import { IoIosMusicalNotes } from "react-icons/io";
+import { AiOutlineLine } from "react-icons/ai";
 
 interface Artists {
 	images: { url: string }[];
@@ -34,185 +37,243 @@ interface Device {
 const Dashboard: React.FC = () => {
 	const [artists, setArtists] = useState<Artists[]>([]);
 	const [artist, setArtist] = useState<Artist>();
-	// @ts-ignore
+	const [searchQuery, setSearchQuery] = useState('');
 	const [device, setDevice] = useState<Device>();
+	const [isPlaying, setIsPlaying] = useState(false);
+	const token = window.localStorage.getItem('access_token');
+	const devicesString = window.localStorage.getItem('devices');
+	const devices = devicesString ? JSON.parse(devicesString) : [];
 
 	useEffect(() => {
-		const token = window.localStorage.getItem('access_token');
-		if (token) {
-			fetch('https://api.spotify.com/v1/me', {
-				headers: {
-					'Authorization': `Bearer ${token}`
-				}
-			})
-			.then(response => {
-				if (response.ok) {
-					return response.json();
-				}
-				throw new Error('La requête a échoué');
-			})
-			.then(data => {
+		if (!token) return;
 
-				const displayName = data.display_name;
-				const names = displayName.split(' ');
-				const firstName = names[0];
-				let lastName = names.slice(1).join(' ');
-				const email = data.email;
-				const country = data.country;
-				const product = data.product;
+		const fetchData = async () => {
+			try {
+				const userResponse = await fetch('https://api.spotify.com/v1/me', {
+					headers: { 'Authorization': `Bearer ${token}` }
+				});
+				if (!userResponse.ok) throw new Error('Failed to fetch user data');
+				const userData = await userResponse.json();
+
+				const { display_name, email, country, product } = userData;
+				const [firstName, ...lastNameParts] = display_name.split(' ');
+				const lastName = lastNameParts.join(' ');
 
 				window.localStorage.setItem('firstname', firstName);
-				window.localStorage.setItem('lastname', lastName)
+				window.localStorage.setItem('lastname', lastName);
 				window.localStorage.setItem('email', email);
 				window.localStorage.setItem('country', country);
 				window.localStorage.setItem('product', product);
-			})
-			.catch(error => {
+				window.localStorage.setItem('device', device?.name as string);
+
+				const artistsResponse = await fetch('https://api.spotify.com/v1/me/following?type=artist&limit=50', {
+					headers: { 'Authorization': `Bearer ${token}` }
+				});
+				if (!artistsResponse.ok) throw new Error('Failed to fetch artists');
+				const artistsData = await artistsResponse.json();
+
+				setArtists(artistsData.artists.items);
+
+				const devicesResponse = await fetch('https://api.spotify.com/v1/me/player/devices', {
+					headers: { 'Authorization': `Bearer ${token}` }
+				});
+				if (!devicesResponse.ok) throw new Error('Failed to fetch devices');
+				const devicesData = await devicesResponse.json();
+				window.localStorage.setItem('devices', JSON.stringify(devicesData.devices));
+				setDevice(devicesData.devices[0])
+			} catch (error) {
 				console.error(error);
-			});
-		}
+			}
+		};
+
+		fetchData();
 	}, []);
 
 	useEffect(() => {
-		const token = window.localStorage.getItem('access_token');
-		if (token) {
-			fetch('https://api.spotify.com/v1/me/following?type=artist', {
+		if (!searchQuery) return;
+		const query = encodeURIComponent(searchQuery);
+
+		const fetchTrack = async () => {
+			try {
+				const response = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=1`, {
+					headers: { 'Authorization': `Bearer ${token}` }
+				});
+				if (!response.ok) throw new Error('Failed to fetch track');
+				const data = await response.json();
+				setArtist(data.tracks.items[0] || null);
+			} catch (error) {
+				console.error('Failed to fetch track:', error);
+			}
+		};
+
+		fetchTrack();
+	}, [searchQuery]);
+	const getDeviceId = () => devices.length > 0 ? devices[0].id : null;
+	const deviceId = getDeviceId();
+	const playMusic = async () => {
+		if (!token || devices.length === 0) {
+			message.error('Aucun device trouvé, veuillez démarrer un track sur votre compte Spotify');
+			return;
+		}
+
+		const uris = [artist?.uri];
+		try {
+			const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+				method: 'PUT',
 				headers: {
-					'Authorization': `Bearer ${token}`
-				}
-			})
-			.then(response => {
-				if (response.ok) {
-					return response.json();
-				}
-				throw new Error('La requête a échoué');
-			})
-			.then(data => {
-				setArtists(data.artists.items);
-			})
-			.catch(error => {
-				console.error(error);
+					'Authorization': `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ uris, position_ms: 0 })
 			});
+
+			if (!response.ok) {
+				throw new Error('Playback request failed');
+			}
+			console.log("Music playback started successfully.");
+			setIsPlaying(true);
+		} catch (error) {
+			console.error("Error in music playback:", error);
 		}
-	}, []);
+	};
+
+	const pauseMusic = async () => {
+		if (!token || devices.length === 0) {
+			message.error('Aucun device trouvé, veuillez démarrer un track sur votre compte Spotify');
+			return;
+		}
+
+		try {
+			const response = await fetch(`https://api.spotify.com/v1/me/player/pause`, {
+				method: 'PUT',
+				headers: {
+					'Authorization': `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!response.ok) {
+				throw new Error('Pause request failed');
+			}
+			console.log("Music playback paused successfully.");
+			setIsPlaying(false);
+		} catch (error) {
+			console.error("Error in pausing music playback:", error);
+		}
+	};
+
+	const playPreviousTrack = async () => {
+		const token = window.localStorage.getItem('access_token');
+		try {
+			const response = await fetch(`https://api.spotify.com/v1/me/player/previous?device_id=${deviceId}`, {
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				},
+			});
+
+			console.log("Previous track played successfully.", response);
+
+			if (!response.ok) {
+				throw new Error('Failed to skip to previous track');
+			}
+
+		} catch (error) {
+			console.error("Error skipping to previous track:", error);
+		}
+	};
+
+	const playNextTrack = async () => {
+		const token = window.localStorage.getItem('access_token');
+		try {
+			const response = await fetch(`https://api.spotify.com/v1/me/player/next?device_id=${deviceId}`, {
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				},
+			});
+			console.log("Next track played successfully.", response);
+
+			if (!response.ok) {
+				throw new Error('Failed to skip to next track');
+			}
+
+		} catch (error) {
+			console.error("Error skipping to next track:", error);
+		}
+	};
 
 	useEffect(() => {
-		const token = window.localStorage.getItem('access_token');
-		if (token) {
-			fetch('https://api.spotify.com/v1/me/player/devices', {
+		if (searchQuery) {
+			const token = window.localStorage.getItem('access_token');
+			const query = encodeURIComponent(searchQuery);
+
+			fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=1`, {
+				method: 'GET',
 				headers: {
 					'Authorization': `Bearer ${token}`
 				}
 			})
 			.then(response => response.json())
 			.then(data => {
-				window.localStorage.setItem('devices', JSON.stringify(data.devices));
+				if (data.tracks.items.length > 0) {
+					setArtist(data.tracks.items[0]);
+				} else {
+					console.log("Aucune chanson trouvée pour cette recherche.");
+				}
 			})
-			.catch(error => console.error("Erreur lors de la récupération des devices:", error));
+			.catch(error => {
+				console.error('Erreur lors de la recherche de la chanson:', error);
+			});
 		}
-	}, []);
+	}, [searchQuery]);
 
-	const playMusic = async () => {
-		const token = window.localStorage.getItem('access_token');
-		const uris = [artist?.uri];
-		const devicesString = window.localStorage.getItem('devices');
-
-		if (devicesString) {
-			const devices = JSON.parse(devicesString);
-			if (devices.length > 0) {
-				setDevice(devices[0]);
-				try {
-					const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${devices[1].id}`, {
-						method: 'PUT',
-						headers: {
-							'Authorization': `Bearer ${token}`,
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							uris: uris,
-							position_ms: 0
-						})
-					});
-
-					if (response.ok) {
-						console.log("Music playback started successfully.");
-					} else {
-						throw new Error('Playback request failed');
-					}
-				} catch (error) {
-					console.error("Error in music playback:", error);
-				}
-			} else {
-				console.log("Aucun device trouvé dans localStorage.");
-			}
-		}
-	};
-
-	const pauseMusic = async () => {
-		const token = window.localStorage.getItem('access_token');
-		const devicesString = window.localStorage.getItem('devices');
-
-		if (devicesString) {
-			const devices = JSON.parse(devicesString);
-			if (devices.length > 0) {
-				try {
-					const response = await fetch(`https://api.spotify.com/v1/me/player/pause`, {
-						method: 'PUT',
-						headers: {
-							'Authorization': `Bearer ${token}`,
-							'Content-Type': 'application/json'
-						}
-					});
-
-					if (response.ok) {
-						console.log("Music playback paused successfully.");
-					} else {
-						throw new Error('Pause request failed');
-					}
-				} catch (error) {
-					console.error("Error in pausing music playback:", error);
-				}
-			} else {
-				console.log("Aucun device trouvé dans localStorage.");
-			}
-		}
-	};
-
-
-	useEffect(() => {
-		const token = window.localStorage.getItem('access_token');
-		const query = encodeURIComponent('La vie qu\'on mène Ninho');
-
-		fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=1`, {
-			method: 'GET',
-			headers: {
-				'Authorization': `Bearer ${token}`
-			}
-		})
-		.then(response => response.json())
-		.then(data => {
-			setArtist(data.tracks.items[0]);
-			console.log(data);
-		})
-		.catch(error => {
-			console.error('Erreur lors de la recherche de la chanson:', error);
-		});
-	}, []);
 
 
 	return (
 		<><title>Dashboard</title>
 			<div>
 				<HeaderComponent/>
+				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', marginTop: '30px', marginBottom: '25px' }}>
+					<div className="searchBarDashboard" style={{ width: '30rem' }}>
+						<Input
+							size="large"
+							placeholder="  Entrez le nom de l'artiste ou de la chanson..."
+							prefix={<><LuUser /><AiOutlineLine /><IoIosMusicalNotes /></>}
+							value={searchQuery}
+							onChange={e => setSearchQuery(e.target.value)}
+						/>
+					</div>
+				</div>
 				<Space direction="vertical" size="middle" style={{display: 'flex'}}>
 					<div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-						<CardMusic image={artist?.album.images[0].url} title={artist?.name} description={artist?.artists[0].name} onPlayClick={playMusic} onPauseClick={pauseMusic}/>
+						<CardMusic
+							image={artist?.album.images[0].url}
+							title={artist?.name}
+							description={artist?.artists[0].name}
+							onPlayClick={() => {	
+								playMusic();
+								setIsPlaying(true);
+							}}
+							 onPauseClick={() => {
+								pauseMusic();
+								setIsPlaying(false);
+							}}
+							onNextClick={() => {
+								if (isPlaying)
+								playNextTrack();
+							}}
+							onPreviousClick={() => {
+								if (isPlaying)
+								playPreviousTrack();
+							}}
+							isPlaying={isPlaying}
+						/>
 						<CardMusic image={artist?.album.images[0].url} title={artist?.name} description={artist?.artists[0].name} onPlayClick={playMusic}/>
 					</div>
 
-					{/*<ContentComponent padding={"40px"} margin={"25px 50px 80px 50px"} heigth={"350px"} width={"350px"}>*/}
-					{/*	<h1 style={{margin: "0 auto 50px auto", textAlign: 'center'}}>Statistiques</h1>*/}
-					{/*</ContentComponent>*/}
 					<ContentComponent padding={"40px"} margin={"25px 50px 80px 50px"} heigth={"400px"}>
 						<h1 style={{margin: "0 auto 50px auto", textAlign: 'center'}}>Listes des abonnements</h1>
 						<div style={{
