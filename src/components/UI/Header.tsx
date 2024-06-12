@@ -80,8 +80,8 @@ const HeaderComponent: React.FC = () => {
 									Dashboard
 								</Menu.Item>
 
-								<Menu.Item key="clients" style={{marginLeft: "30px"}}
-													 onClick={() => handleMenuClick("/playlists-management", "dashboard")}>
+								<Menu.Item key="playlists-management" style={{marginLeft: "30px"}}
+													 onClick={() => handleMenuClick("/playlists-management", "playlists-management")}>
 									Gestion des playlists
 								</Menu.Item>
 							</Menu>

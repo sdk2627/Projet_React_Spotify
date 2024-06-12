@@ -9,6 +9,7 @@
 .playlists-grid {
     display: grid;
     grid-template-columns: repeat(4, auto);
+    gap: 1.5rem;
 }
 
 .title {

@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from "react";
 import HeaderComponent from "../../components/UI/Header.tsx";
-import CardComponent from "../../components/UI/Card.tsx";
 import './PlaylistsManagement.css';
+import PlaylistCard from "../../components/UI/PlaylistCard.tsx";
 
 interface Playlist {
     collaborative: boolean;
@@ -78,7 +78,7 @@ const PlaylistsManagement: React.FC = () => {
                             <h3>Nombre de playlists : {playlists.length}</h3>
                         </div>
                         {playlists.map((playlist,index) => (
-                            <CardComponent
+                            <PlaylistCard
                                 key={index}
                                 images={playlist.images}
                                 title={playlist.name}
