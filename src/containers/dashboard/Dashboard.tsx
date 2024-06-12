@@ -233,7 +233,7 @@ const Dashboard: React.FC = () => {
 
 
 	return (
-		<><title>Dashboard</title>
+		<><title>SpotiFlow • Dashboard</title>
 			<div>
 				<HeaderComponent/>
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', marginTop: '30px', marginBottom: '25px' }}>

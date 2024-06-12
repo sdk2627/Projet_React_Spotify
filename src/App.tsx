@@ -13,7 +13,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<Login/>}/>
                 <Route path="/dashboard" element={<Dashboard/>}/>
                 <Route path="/playlists-management" element={<PlaylistsManagement/>}/>
-                <Route path="/check/spotify" element={<SpotifyAuthComponent clientId={'895c0fc84bc04900b3c7cdb0867282ef'}/>}/>
+                <Route path="/check/spotify" element={<SpotifyAuthComponent clientId={'a113eb2f3579419dbcacfc2d1c82fed0'}/>}/>
                 <Route path="/callback" element={<CallbackPage/>}/>
             </Routes>
         </Router>
