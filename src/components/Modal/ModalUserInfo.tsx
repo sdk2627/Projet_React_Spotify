@@ -26,6 +26,7 @@ const ModalUserInfo: React.FC<ModalCompoProps> = ({open, setOpen}) => {
 	// @ts-ignore
 
 	const handleCancel = () => {
+		console.log('Clicked cancel button');
 		setOpen(false);
 	};
 

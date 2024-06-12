@@ -2,47 +2,9 @@ import React,{useEffect,useState} from "react";
 import HeaderComponent from "../../components/UI/Header.tsx";
 import './PlaylistsManagement.css';
 import PlaylistCard from "../../components/UI/PlaylistCard.tsx";
+import {Playlist} from "../../utils/interface.ts";
 
-interface Playlist {
-    collaborative: boolean;
-    description: string;
-    external_urls: ExternalUrls;
-    href: string;
-    id: string;
-    images: Image[];
-    name: string;
-    owner: User;
-    primary_color: string | null;
-    public: boolean;
-    snapshot_id: string;
-    tracks: Tracks;
-    type: string;
-    uri: string;
-}
 
-interface ExternalUrls {
-    spotify: string;
-}
-
-interface Image {
-    height: number;
-    url: string;
-    width: number;
-}
-
-interface User {
-    display_name: string;
-    external_urls: ExternalUrls;
-    href: string;
-    id: string;
-    type: string;
-    uri: string;
-}
-
-interface Tracks {
-    href: string;
-    total: number;
-}
 
 
 const PlaylistsManagement: React.FC = () => {
@@ -80,10 +42,7 @@ const PlaylistsManagement: React.FC = () => {
                         {playlists.map((playlist,index) => (
                             <PlaylistCard
                                 key={index}
-                                images={playlist.images}
-                                title={playlist.name}
-                                description={playlist.description}
-                                trackNumber={playlist.tracks.total}
+                                playlist={playlist}
                             />
                         ))}
                     </div>

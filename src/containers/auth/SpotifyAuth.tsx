@@ -17,6 +17,9 @@ const SpotifyAuthComponent: React.FC<SpotifyAuthProps> = ({clientId}) => {
 		'user-modify-playback-state',
 		'playlist-read-collaborative',
 		'playlist-read-private',
+		'playlist-modify-public',
+		'playlist-modify-private',
+
 	].join('%20');
 	const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&&scope=${scopes}`;
 

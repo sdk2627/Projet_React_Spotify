@@ -1,56 +1,61 @@
-import React from 'react';
-import {Card,Dropdown, Space} from 'antd';
+import React,{useState} from 'react';
+import {Card,Dropdown,Space} from 'antd';
 import {InputProps} from 'antd/lib/input';
 import Meta from "antd/es/card/Meta";
-import type { MenuProps } from 'antd';
+import type {MenuProps} from 'antd';
+import {Playlist} from "../../utils/interface.ts";
+import ModalPlaylistInfo from "../Modal/ModalPlaylistInfo.tsx";
 
-interface MyInputProps extends InputProps {
-    images?: { url: string }[],
-    title?: string;
-    description?: string;
-    trackNumber?: number;
+interface Inputs extends InputProps {
+   playlist: Playlist;
 }
 
-const items: MenuProps['items'] = [
-    {
-        label: <div>Voir</div>,
-        key: '0',
-    },
-    {
-        type: 'divider',
-    },
-    {
-        label: <div>Modifier</div>,
-        key: '1',
-    },
-    {
-        type: 'divider',
-    },
-    {
-        label: <div>Supprimer</div>,
-        key: '3',
-    },
-];
+const PlaylistCardComponent: React.FC<Inputs> = ({
+                                                           playlist,
+                                                       }) => {
 
-const PlaylistCardComponent: React.FC<MyInputProps> = ({
-                                                   title,
-                                                   description,
-                                                   trackNumber,
-                                                   images,
-                                               }) => {
-    const coverImage = images && images.length > 0 ? images[0].url : '';
+    const [isModalUserIOpen, setIsModalUserIOpen] = useState(false);
+
+    const handlePlaylistEditClick = (id: string) => {
+        return () => {
+            setIsModalUserIOpen(true);
+        };
+    }
+
+    const items: MenuProps['items'] = [
+        {
+            label: <div>Ajouter un titre</div>,
+            key: '0',
+        },
+        {
+            label: <div>Modifier</div>,
+            key: '1',
+            onClick: handlePlaylistEditClick(playlist.id || '')
+        },
+        {
+            type: 'divider',
+        },
+        {
+            label: <div>Supprimer</div>,
+            key: '3',
+        },
+    ];
+
     return (
+        <Space wrap>
         <Card
             style={{
-                width: 200,
+                width: 220,
                 boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'
             }}
-            cover={ coverImage &&
-                <img alt={title} src={coverImage} style={{width: '200px',height: '200px'}}/>
+            cover={playlist.images[0].url &&
+                <img alt={playlist.name} src={playlist.images[0].url} style={{width: '220px',height: '220px'}}/>
             }
         >
-            {description ? <Meta title={title} description={"Description: " + description}/> : <Meta title={title} description={trackNumber + " titres" } />}
-            <Dropdown menu={{ items }} trigger={['click']}>
+            {playlist.description ? <Meta title={playlist.name} style={{whiteSpace: 'nowrap'}}
+                                 description={playlist.description}/> :
+                <Meta title={playlist.name} description={playlist.tracks.total + " titres"}/>}
+            <Dropdown menu={{items}} trigger={['click']}>
                 <a onClick={(e) => e.preventDefault()}>
                     <Space>
                         <span>...</span>
@@ -58,6 +63,14 @@ const PlaylistCardComponent: React.FC<MyInputProps> = ({
                 </a>
             </Dropdown>
         </Card>
+            <ModalPlaylistInfo
+                playlist={playlist}
+                isModalOpen={isModalUserIOpen}
+                setIsModalOpen={setIsModalUserIOpen}
+                onClose={() => {}}
+                open={isModalUserIOpen}
+            />
+        </Space>
     );
 };
 

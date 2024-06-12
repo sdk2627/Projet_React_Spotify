@@ -23,3 +23,7 @@ h3 {
     color: #bdbcbc;
     margin: unset;
 }
+
+.ant-card-meta-description {
+    color: #bdbcbc;
+}
