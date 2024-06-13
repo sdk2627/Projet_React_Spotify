@@ -4,11 +4,12 @@
     align-items: center;
     justify-content: center;
     margin: 4rem 1rem;
+    padding: 3rem;
 }
 
 .playlists-grid {
     display: grid;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(5, auto);
     gap: 1.5rem;
 }
 

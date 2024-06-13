@@ -15,6 +15,11 @@ const ModalPlaylistInfo: React.FC<ModalCompoProps> = ({playlist,open,setOpen, on
         setOpen(false);
     };
 
+    const handleOk = () => {
+        onPlaylistAdded(playlistName, playlistDescription, playlistIsPublic, playlist.id);
+        setOpen(false);
+    }
+
     const [playlistName, setPlaylistName] = useState(playlist.name || '');
     const [playlistDescription, setPlaylistDescription] = useState(playlist.description || '');
     const [playlistIsPublic, setPlaylistIsPublic] = useState(playlist.public || false);
@@ -28,7 +33,7 @@ const ModalPlaylistInfo: React.FC<ModalCompoProps> = ({playlist,open,setOpen, on
             <Modal
                 open={open}
                 onCancel={handleCancel}
-                onOk={() => onPlaylistAdded(playlistName, playlistDescription, playlistIsPublic, playlist.id)}
+                onOk={handleOk}
                 title={playlist.name}
                 width={"800px"}
             >

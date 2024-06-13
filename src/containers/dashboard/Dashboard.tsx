@@ -207,7 +207,6 @@ const Dashboard: React.FC = () => {
 
 	useEffect(() => {
 		if (searchQuery) {
-			const token = window.localStorage.getItem('access_token');
 			const query = encodeURIComponent(searchQuery);
 
 			fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=1`, {
@@ -271,7 +270,8 @@ const Dashboard: React.FC = () => {
 							}}
 							isPlaying={isPlaying}
 						/>
-						<CardMusic image={artist?.album.images[0].url} title={artist?.name} description={artist?.artists[0].name} onPlayClick={playMusic}/>
+						<CardMusic image={artist?.album.images[0].url} title={artist?.name} description={artist?.artists[0].name}
+											 onPlayClick={playMusic} isPlaying={false}/>
 					</div>
 
 					<ContentComponent padding={"40px"} margin={"25px 50px 80px 50px"} heigth={"400px"}>
