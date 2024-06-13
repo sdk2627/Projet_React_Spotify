@@ -34,6 +34,8 @@ const ModalPlaylistInfo: React.FC<ModalCompoProps> = ({playlist,open,setOpen, on
                 open={open}
                 onCancel={handleCancel}
                 onOk={handleOk}
+                okText={"Modifier"}
+                cancelText={"Annuler"}
                 title={playlist.name}
                 width={"800px"}
             >

@@ -46,7 +46,7 @@ const Button: React.FC<ButtonProps> = ({
 };
 
 Button.defaultProps = {
-	marginT: '0.5rem',
+	marginT: '2rem',
 	bgcolor: '#4EF037',
 	fontColor: 'black',
 };
