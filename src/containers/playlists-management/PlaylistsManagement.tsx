@@ -44,21 +44,25 @@ const PlaylistsManagement: React.FC = () => {
             });
 
             if (!updateResponse.ok) throw new Error('Failed to update playlist');
+            console.log('updated')
+            setTimeout(() => {
+                // After updating the playlist, fetch the updated data
+                const fetchData = async () => {
+                    console.log('fetching')
+                    try {
+                        const playlistsResponse = await fetch('https://api.spotify.com/v1/me/playlists', {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (!playlistsResponse.ok) throw new Error('Failed to fetch playlists');
+                        const playlistsData = await playlistsResponse.json();
+                        setPlaylists(playlistsData.items);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                };
+                fetchData();
+            },4000);
 
-            // After updating the playlist, fetch the updated data
-            const fetchData = async () => {
-                try {
-                    const playlistsResponse = await fetch('https://api.spotify.com/v1/me/playlists', {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    if (!playlistsResponse.ok) throw new Error('Failed to fetch playlists');
-                    const playlistsData = await playlistsResponse.json();
-                    setPlaylists(playlistsData.items);
-                } catch (error) {
-                    console.error(error);
-                }
-            };
-            fetchData();
 
         } catch (error) {
             console.error(error);
