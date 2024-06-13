@@ -32,7 +32,7 @@ const PlaylistCardComponent: React.FC<Inputs> = ({
         {
             label: <div>Modifier</div>,
             key: '1',
-            onClick: handlePlaylistEditClick()
+            onClick: handlePlaylistEditClick(playlist.id || '')
         },
         {
             type: 'divider',
@@ -69,7 +69,7 @@ const PlaylistCardComponent: React.FC<Inputs> = ({
                 playlist={playlist}
                 setOpen={setIsModalUserIOpen}
                 open={isModalUserIOpen}
-                onPlaylistAdded={() => updatePlaylistEvent}
+                onPlaylistAdded={(playlistName, playlistDescription, playlistIsPublic, playlistId) => updatePlaylistEvent(playlistName, playlistDescription, playlistIsPublic, playlistId)}
             />
         </Space>
     );
