@@ -1,24 +1,20 @@
 import React,{Dispatch,SetStateAction,useState} from "react";
 import {Checkbox,Input,Layout,Modal} from "antd";
 import {Playlist} from "../../utils/interface.ts";
-import Button from "../UI/Button.tsx";
 
 interface ModalCompoProps {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
     playlist: Playlist;
+    onPlaylistAdded: CallableFunction;
 }
 
-const ModalPlaylistInfo: React.FC<ModalCompoProps> = ({playlist,open,setOpen}) => {
-
-    const onClose = () => {
-        setOpen(false);
-    }
+const ModalPlaylistInfo: React.FC<ModalCompoProps> = ({playlist,open,setOpen, onPlaylistAdded}) => {
 
     const handleCancel = () => {
-        console.log('Clicked cancel button');
         setOpen(false);
     };
+
     const [playlistName, setPlaylistName] = useState(playlist.name || '');
     const [playlistDescription, setPlaylistDescription] = useState(playlist.description || '');
     const [playlistIsPublic, setPlaylistIsPublic] = useState(playlist.public || false);
@@ -31,10 +27,10 @@ const ModalPlaylistInfo: React.FC<ModalCompoProps> = ({playlist,open,setOpen}) =
         }}>
             <Modal
                 open={open}
-                title={playlist.name}
                 onCancel={handleCancel}
+                onOk={() => onPlaylistAdded(playlistName, playlistDescription, playlistIsPublic, playlist.id)}
+                title={playlist.name}
                 width={"800px"}
-                footer={[]}
             >
 
                 <Input
@@ -55,16 +51,6 @@ const ModalPlaylistInfo: React.FC<ModalCompoProps> = ({playlist,open,setOpen}) =
                 >
                     Playlist publique
                 </Checkbox>
-
-                <Button
-                    onClick={onClose}
-                    bgcolor={"#438539"}
-                    fontColor={"black"}
-                    marginT={"20px"}
-                    widthB={"100%"}
-                >
-                    Sauvegarder les modifications
-                </Button>
             </Modal>
         </Layout>
     );
