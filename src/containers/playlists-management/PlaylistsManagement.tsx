@@ -3,10 +3,14 @@ import HeaderComponent from "../../components/UI/Header.tsx";
 import './PlaylistsManagement.css';
 import PlaylistCard from "../../components/UI/PlaylistCard.tsx";
 import { Playlist } from "../../utils/interface.ts";
+import {Input} from "antd";
+import {PiPlaylistBold} from "react-icons/pi";
 
 const PlaylistsManagement: React.FC = () => {
     const token = window.localStorage.getItem('access_token');
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
+    const [searchQuery,setSearchQuery] = useState('');
+    const [filteredPlaylists, setFilteredPlaylists] = useState<Playlist[]>([]);
 
     const fetchData = async () => {
         try {
@@ -63,19 +67,49 @@ const PlaylistsManagement: React.FC = () => {
         }
     }
 
+    useEffect(() => {
+        if (!searchQuery) {
+            fetchData();
+            setFilteredPlaylists(playlists);
+        } else {
+            const filtered = playlists.filter(playlist =>
+              playlist.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredPlaylists(filtered);
+        }
+    }, [searchQuery, playlists]);
+
     return (
       <>
           <title>SpotiFlow • Playlists Management</title>
 
           <div>
               <HeaderComponent />
+              <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100%',
+                  marginTop: '30px',
+                  marginBottom: '25px'
+              }}>
+                  <div className="searchBarDashboard" style={{ width: '30rem' }}>
+                      <Input
+                        size="large"
+                        placeholder="Entrez le nom de l'artiste ou de la chanson..."
+                        prefix={<PiPlaylistBold/>}
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                      />
+                  </div>
+              </div>
               <div className={'playlists-wrapper'}>
                   <div className={'playlists-grid'}>
                       <div>
                           <h1 className={'title'}>Playlists</h1>
-                          <h3>Nombre de playlists : {playlists.length}</h3>
+                          <h3>Nombre de playlists : {filteredPlaylists.length}</h3>
                       </div>
-                      {playlists.map((playlist, index) => (
+                      {filteredPlaylists.map((playlist, index) => (
                         <PlaylistCard
                           key={index}
                           playlist={playlist}

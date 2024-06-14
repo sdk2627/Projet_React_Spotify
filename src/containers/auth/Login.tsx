@@ -22,7 +22,7 @@ const Login: React.FC = () => {
 		setLoading(true);
 		setTimeout(() => {
 			setLoading(false);
-			navigate('/dashboard')
+			navigate('/')
 		}, 2000);
 	}
 

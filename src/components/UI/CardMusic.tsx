@@ -2,6 +2,7 @@ import React from 'react';
 import {Card,Button} from 'antd';
 import {LeftCircleOutlined,PlayCircleOutlined,RightCircleOutlined,PauseCircleOutlined} from '@ant-design/icons';
 import Meta from "antd/es/card/Meta";
+import defaultImage from "../../assets/a362273509f7eccdcf362bb73b3b006d.avif";
 
 interface MyInputProps {
     image?: string;
@@ -35,7 +36,7 @@ const CardMusic: React.FC<MyInputProps> = ({
     return (
         <Card
             style={{width: 600,height: 360,margin: "40px 50px"}}
-            cover={<img alt="NOT FOUND" src={image} style={{width: '600px',height: '250px'}}/>}
+            cover={image ? <img src={image} style={{width: '600px',height: '250px'}} alt=""/> : <img src={defaultImage} style={{width: '600px',height: '300px'}} alt=""/>}
             actions={[
                 <Button icon={<LeftCircleOutlined/>} onClick={onPreviousClick} disabled={!isPlaying} type="text"/>,
                 isPlaying
