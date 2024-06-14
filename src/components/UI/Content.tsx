@@ -28,7 +28,7 @@ const ContentComponent: React.FC<MyContentProps> = ({
 				height: heigth,
 				minWidth: width,
 				background: 'white',
-				borderRadius: '20px',
+				borderRadius: '10px',
 				overflowY: 'auto',
 			}}
 			{...props}
