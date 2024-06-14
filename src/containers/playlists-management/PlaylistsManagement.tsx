@@ -82,7 +82,6 @@ const PlaylistsManagement: React.FC = () => {
     return (
       <>
           <title>SpotiFlow • Playlists Management</title>
-
           <div>
               <HeaderComponent />
               <div style={{
@@ -104,11 +103,11 @@ const PlaylistsManagement: React.FC = () => {
                   </div>
               </div>
               <div className={'playlists-wrapper'}>
+                  <div>
+                      <h1 className={'title'}>Playlists</h1>
+                      <h3>Nombre de playlists : {filteredPlaylists.length}</h3>
+                  </div>
                   <div className={'playlists-grid'}>
-                      <div>
-                          <h1 className={'title'}>Playlists</h1>
-                          <h3>Nombre de playlists : {filteredPlaylists.length}</h3>
-                      </div>
                       {filteredPlaylists.map((playlist, index) => (
                         <PlaylistCard
                           key={index}

@@ -11,6 +11,8 @@
     display: grid;
     grid-template-columns: repeat(5, auto);
     gap: 1.5rem;
+    padding: 3rem;
+    justify-content: center;
 }
 
 .title {
