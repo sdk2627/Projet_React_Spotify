@@ -44,10 +44,10 @@ const PlaylistsManagement: React.FC = () => {
             });
 
             if (!updateResponse.ok) throw new Error('Failed to update playlist');
-            setTimeout(() => {
+      /*      setTimeout(() => {*/
                 // After updating the playlist, fetch the updated data
-                fetchData();
-            },4000);
+      /*          fetchData();*/
+      /*      },4000);*/
 
             // After updating the playlist, directly update the state
             setPlaylists(prevPlaylists =>
