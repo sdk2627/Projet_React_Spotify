@@ -9,8 +9,7 @@ function CallbackPage() {
 		const hash = window.location.hash;
 		let token = window.localStorage.getItem('access_token');
 		if (!token && hash) {
-			// @ts-ignore
-			token = hash.substring(1).split('&').find(elem => elem.startsWith('access_token'))?.split('=')[1];
+			token = hash.substring(1).split('&').find(elem => elem.startsWith('access_token'))?.split('=')[1] || '';
 			if (token) {
 				window.localStorage.setItem('access_token', token);
 				navigate('/dashboard');

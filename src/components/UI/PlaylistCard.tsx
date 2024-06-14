@@ -69,7 +69,7 @@ const PlaylistCardComponent: React.FC<Inputs> = ({
                 playlist={playlist}
                 setOpen={setIsModalUserIOpen}
                 open={isModalUserIOpen}
-                onPlaylistAdded={(playlistName: string, playlistDescription: string, playlistIsPublic: Boolean, playlistId: string) => updatePlaylistEvent(playlistName, playlistDescription, playlistIsPublic, playlistId)}
+                onPlaylistAdded={(playlistName: string, playlistDescription: string, playlistIsPublic: boolean, playlistId: string) => updatePlaylistEvent(playlistName, playlistDescription, playlistIsPublic, playlistId)}
             />
         </Space>
     );
