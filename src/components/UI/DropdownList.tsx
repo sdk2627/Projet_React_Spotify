@@ -34,7 +34,7 @@ const DropdownList: React.FC = () => {
 			type: 'divider',
 		},
 		{
-			label: 'Se deconnecté',
+			label: 'Se déconnecter',
 			key: '4',
 			icon: <RiLogoutCircleRLine/>,
 			danger: true,
@@ -69,6 +69,7 @@ const DropdownList: React.FC = () => {
 				<ModalUserInfo open={isModalUserIOpen} setOpen={setIsModalUserIOpen}/>
 			</Space>
 		);
+	return null;
 };
 
 export default DropdownList;
