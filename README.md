@@ -11,6 +11,10 @@ Il est nécessaire d'ajouter le paramètre `--legacy-peer-deps` lors de l'instal
 ```shell
 npm i --legacy-peer-deps
 ```
+Ensuite, pour lancer le projet, il suffit de lancer la commande suivante:
+```shell
+npm run dev
+```
 
 Le projet utilise l'API Spotify, il est donc nécessaire de créer un compte Spotify Developer et de créer une application pour obtenir un client ID et un client secret.
 ### [Lien vers Spotify developer](https://developer.spotify.com/)
