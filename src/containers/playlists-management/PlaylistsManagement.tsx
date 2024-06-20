@@ -92,10 +92,10 @@ const PlaylistsManagement: React.FC = () => {
                   marginTop: '30px',
                   marginBottom: '25px'
               }}>
-                  <div className="searchBarDashboard" style={{ width: '30rem' }}>
+                  <div className="searchBarPlaylist" style={{ width: '30rem' }}>
                       <Input
                         size="large"
-                        placeholder="Entrez le nom de l'artiste ou de la chanson..."
+                        placeholder="Entrez le nom de la playlist..."
                         prefix={<PiPlaylistBold/>}
                         value={searchQuery}
                         onChange={e => setSearchQuery(e.target.value)}
